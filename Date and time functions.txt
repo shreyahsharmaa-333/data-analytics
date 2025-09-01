@@ -1,0 +1,60 @@
+Table Definition & Sample Data
+CREATE TABLE Employees (
+    EmpID INT PRIMARY KEY,
+    Name VARCHAR(50),
+    DateOfBirth DATE,
+    JoinDate DATE
+);
+
+INSERT INTO Employees (EmpID, Name, DateOfBirth, JoinDate)
+VALUES
+(1, 'Alice Johnson', '1985-05-20', '2010-06-15'),
+(2, 'Bob Smith', '1990-08-10', '2015-09-01'),
+(3, 'Charlie Brown', '1988-03-25', '2012-11-12'),
+(4, 'Diana Prince', '1992-01-30', '2017-07-08'),
+(5, 'Eve Adams', '1987-12-05', '2013-03-20');
+
+✅ Queries
+1. Display the current date and time
+SELECT NOW() AS CurrentDateTime;
+
+
+(Alternative: CURRENT_TIMESTAMP;)
+
+2. Calculate the age of each employee
+SELECT Name,
+       TIMESTAMPDIFF(YEAR, DateOfBirth, CURDATE()) AS Age
+FROM Employees;
+
+3. Calculate the total years of experience for each employee
+SELECT Name,
+       TIMESTAMPDIFF(YEAR, JoinDate, CURDATE()) AS YearsOfExperience
+FROM Employees;
+
+4. Extract the year, month, and day from each employee's date of birth
+SELECT Name,
+       YEAR(DateOfBirth) AS BirthYear,
+       MONTH(DateOfBirth) AS BirthMonth,
+       DAY(DateOfBirth) AS BirthDay
+FROM Employees;
+
+5. List all employees born in the month of August
+SELECT Name, DateOfBirth
+FROM Employees
+WHERE MONTH(DateOfBirth) = 8;
+
+6. Display employees whose birthdays are in the next 30 days
+SELECT Name, DateOfBirth
+FROM Employees
+WHERE DATE_FORMAT(DateOfBirth, '%m-%d')
+      BETWEEN DATE_FORMAT(CURDATE(), '%m-%d')
+          AND DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL 30 DAY), '%m-%d');
+
+
+
+SELECT Name, DateOfBirth
+FROM Employees
+WHERE DATE_ADD(DateOfBirth, INTERVAL YEAR(CURDATE())-YEAR(DateOfBirth) YEAR)
+      BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 30 DAY);
+
+
